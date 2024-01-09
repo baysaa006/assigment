@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
-import { User } from '@interfaces/users.interface';
+import { User } from '@common/interfaces';
 import { UserService } from '@services/users.service';
 
 export class UserController {

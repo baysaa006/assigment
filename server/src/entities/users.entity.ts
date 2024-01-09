@@ -1,7 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, Index } from 'typeorm';
-import { User } from '@interfaces/users.interface';
-import { Wallet } from '@/interfaces/wallet.interface';
+import { User, Wallet } from '@common/interfaces';
 import { WalletEntity } from './wallet.entity';
 
 @Entity()

@@ -4,9 +4,8 @@ import { Service } from 'typedi';
 import { EntityRepository, Repository } from 'typeorm';
 import { SECRET_KEY } from '@config';
 import { UserEntity } from '@entities/users.entity';
-import { HttpException } from '@/exceptions/HttpException';
-import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
-import { User } from '@interfaces/users.interface';
+import { HttpException } from '@common/exceptions';
+import { DataStoredInToken, TokenData, User } from '@common/interfaces';
 
 const createToken = (user: User): TokenData => {
   const dataStoredInToken: DataStoredInToken = { id: user.id };

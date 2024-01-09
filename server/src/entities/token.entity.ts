@@ -1,5 +1,5 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, Index, ManyToOne } from 'typeorm';
-import { Token } from '@/interfaces/token.interface';
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index, ManyToOne } from 'typeorm';
+import { Token } from '@common/interfaces';
 import { WalletEntity } from './wallet.entity';
 
 @Entity()

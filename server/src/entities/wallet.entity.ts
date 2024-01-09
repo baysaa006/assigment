@@ -1,9 +1,7 @@
 import { BaseEntity, Entity, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, Index, PrimaryGeneratedColumn } from 'typeorm';
-import { Wallet } from '@/interfaces/wallet.interface';
+import { Wallet, Token } from '@common/interfaces';
 import { UserEntity } from './users.entity';
-import { Token } from '@/interfaces/token.interface';
 import { TokenEntity } from './token.entity';
-import { token } from 'morgan';
 
 export enum WalletType {
   METAMASK = 'METAMASK',
