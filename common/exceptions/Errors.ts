@@ -8,6 +8,14 @@ export class ErrorType {
 
 export const NO_USER = new ErrorType(400, "CE17", "Хэрэглэгч бүртгэлгүй байна");
 
+export const NO_WALLET = new ErrorType(400, "CW01", "Хэтэвч бүртгэлгүй байна");
+
+export const WALLET_EXIST = new ErrorType(
+  401,
+  "CW01",
+  "Хэтэвч бүртгэлтэй байна"
+);
+
 export const INVALID_CREDENTIALS = new ErrorType(
   400,
   "CE16",
@@ -19,6 +27,10 @@ export const USER_ALREADY_EXIST = new ErrorType(
   "CE18",
   "Хэрэглэгч бүртгэлтэй байна"
 );
+
+export const INVALID_ADDRESS = new ErrorType(403, "CA01", "Хаяг буруу байна");
+
+export const NO_ADDRESS = new ErrorType(401, "CA02", "Хаяг олдсонгүй байна");
 
 export const NOT_FOUND = new ErrorType(400, "CU15", "Prediction олдсонгүй");
 

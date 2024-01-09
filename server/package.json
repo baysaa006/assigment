@@ -9,6 +9,7 @@
     "build:tsc": "tsc && tsc-alias"
   },
   "dependencies": {
+    "@types/uuid": "^9.0.7",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -22,11 +23,12 @@
     "morgan": "^1.10.0",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.45",
     "typedi": "^0.10.0",
+    "typeorm": "^0.2.45",
+    "uuid": "^9.0.1",
+    "web3": "^4.3.0",
     "winston": "^3.8.1",
-    "winston-daily-rotate-file": "^4.7.1",
-    "web3": "^4.3.0"
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",

@@ -1,13 +1,6 @@
 import React, { createContext, useState } from "react";
 import decode from "jwt-decode";
-
-export interface Payload {
-  iss: string;
-  exp: number;
-  role: string;
-  name?: string;
-  token: number;
-}
+import { Payload } from "@common/interfaces/auth.interface";
 
 export const setAccessToken = (token: string) =>
   localStorage.setItem("token", token);
@@ -63,7 +56,6 @@ export const AuthProvider = ({ children }: any) => {
   const payload = getPayload();
 
   const signOut = () => {
-    console.log("Remove token");
     localStorage.removeItem("token");
     setAuthenticated(false);
   };

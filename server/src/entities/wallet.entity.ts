@@ -15,7 +15,7 @@ export class WalletEntity extends BaseEntity implements Wallet {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserEntity, { nullable: false })
+  @ManyToOne(() => UserEntity, { nullable: true })
   user: UserEntity;
 
   @Column({ type: 'varchar', nullable: false })

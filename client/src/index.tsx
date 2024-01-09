@@ -4,13 +4,12 @@ import "./index.css";
 import App from "./App";
 import AuthProvider from "contexts/auth.context";
 import { ChakraProvider } from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import ClientProvider from "providers/client";
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const queryClient = new QueryClient();
 
 root.render(
   <ChakraProvider>
-    <QueryClientProvider client={queryClient}>
+    <ClientProvider>
       <BrowserRouter>
         <AuthProvider>
           <Routes>
@@ -18,6 +17,6 @@ root.render(
           </Routes>
         </AuthProvider>
       </BrowserRouter>
-    </QueryClientProvider>
+    </ClientProvider>
   </ChakraProvider>
 );

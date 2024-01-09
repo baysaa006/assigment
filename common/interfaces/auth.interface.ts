@@ -10,6 +10,13 @@ export interface TokenData {
   expiresIn: number;
 }
 
+export interface Payload {
+  address: string;
+  signature: string;
+  nonce: string;
+  exp: number;
+}
+
 export interface RequestWithUser extends Request {
   user: User;
 }
