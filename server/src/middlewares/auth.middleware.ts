@@ -2,8 +2,9 @@ import { NextFunction, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
 import { UserEntity } from '@entities/users.entity';
-import { HttpException } from '@common/exceptions';
+import { ServiceException } from '@common/exceptions';
 import { DataStoredInToken, RequestWithUser } from '@common/interfaces';
+import { INVALID_TOKEN } from '@common/exceptions/Errors';
 
 const getAuthorization = req => {
   const coockie = req.cookies['Authorization'];
@@ -27,12 +28,12 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
         req.user = findUser;
         next();
       } else {
-        next(new HttpException(401, 'Wrong authentication token'));
+        next(new ServiceException(INVALID_TOKEN));
       }
     } else {
-      next(new HttpException(404, 'Authentication token missing'));
+      next(new ServiceException(INVALID_TOKEN));
     }
   } catch (error) {
-    next(new HttpException(401, 'Wrong authentication token'));
+    next(new ServiceException(INVALID_TOKEN));
   }
 };

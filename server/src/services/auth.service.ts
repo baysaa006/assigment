@@ -1,11 +1,11 @@
-import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { Service } from 'typedi';
 import { EntityRepository, Repository } from 'typeorm';
 import { SECRET_KEY } from '@config';
 import { UserEntity } from '@entities/users.entity';
-import { HttpException } from '@common/exceptions';
+import { ServiceException } from '@common/exceptions';
 import { DataStoredInToken, TokenData, User } from '@common/interfaces';
+import { USER_ALREADY_EXIST } from '@common/exceptions';
 
 const createToken = (user: User): TokenData => {
   const dataStoredInToken: DataStoredInToken = { id: user.id };
@@ -24,7 +24,7 @@ const createCookie = (tokenData: TokenData): string => {
 export class AuthService extends Repository<UserEntity> {
   public async signup(userData: User): Promise<User> {
     const findUser: User = await UserEntity.findOne({ where: { email: userData.email } });
-    if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
+    if (findUser) throw new ServiceException(USER_ALREADY_EXIST);
 
     const createUserData: User = await UserEntity.create({ ...userData }).save();
     return createUserData;
@@ -32,7 +32,7 @@ export class AuthService extends Repository<UserEntity> {
 
   public async login(userData: User): Promise<{ cookie: string; findUser: User }> {
     const findUser: User = await UserEntity.findOne({ where: { email: userData.email } });
-    if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`);
+    if (!findUser) throw new ServiceException(USER_ALREADY_EXIST);
 
     const tokenData = createToken(findUser);
     const cookie = createCookie(tokenData);
@@ -42,7 +42,7 @@ export class AuthService extends Repository<UserEntity> {
 
   public async logout(userData: User): Promise<User> {
     const findUser: User = await UserEntity.findOne({ where: { email: userData.email } });
-    if (!findUser) throw new HttpException(409, "User doesn't exist");
+    if (!findUser) throw new ServiceException(USER_ALREADY_EXIST);
 
     return findUser;
   }

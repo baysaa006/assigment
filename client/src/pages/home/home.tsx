@@ -1,16 +1,25 @@
-import { getUser } from "api/user";
-import axios from "axios";
-import React, { useState } from "react";
+import { getUser, getUsers } from "api/user";
+import { useState } from "react";
 import Web3 from "web3";
+import { useQuery } from "react-query";
+import { User } from "@common/interfaces";
+import { ServiceException } from "@common/exceptions";
 
 declare global {
   interface Window {
     ethereum?: any;
   }
 }
+export interface UserResponse {
+  data: User[];
+}
+
 export const Home = () => {
   const [account, setAccount] = useState<string>();
   const web3 = new Web3((globalThis as any).ethereum);
+  const { isLoading, isError, data, error } = useQuery(["getUser", "123"], () =>
+    getUser("124443")
+  );
 
   async function getUserAddress() {
     try {
@@ -22,8 +31,6 @@ export const Home = () => {
 
         if (users.status == 200) {
           console.log(users.data);
-        } else {
-          console.log(users.error);
         }
       } else {
         alert("install it ");
@@ -53,6 +60,13 @@ export const Home = () => {
   //     throw error;
   //   }
   // }
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {data?.data.message}</span>;
+  }
 
   return (
     <div className="App">

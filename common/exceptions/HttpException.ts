@@ -1,10 +1,9 @@
-export class HttpException extends Error {
-  public status: number;
-  public message: string;
+import { ErrorType } from "./Errors";
 
-  constructor(status: number, message: string) {
-    super(message);
-    this.status = status;
-    this.message = message;
+export class ServiceException extends Error {
+  status: number;
+  constructor(public readonly error: ErrorType, message?: string) {
+    super(message || error.message);
+    this.status = error.status;
   }
 }

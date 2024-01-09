@@ -23,7 +23,8 @@
     "baseUrl": "src",
     "paths": {
       "@assets/*": ["./src/assetsassets/*"],
-      "@interfaces/*": ["src/interfaces/index/*"]
+      "@interfaces/*": ["src/interfaces/index/*"],
+      "@common/*": ["../../common/*"],
     },
   },
   "include": [

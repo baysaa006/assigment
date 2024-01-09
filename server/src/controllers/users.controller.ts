@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { User } from '@common/interfaces';
 import { UserService } from '@services/users.service';
+import { logger } from '@/utils/logger';
 
 export class UserController {
   public user = Container.get(UserService);
@@ -19,6 +20,8 @@ export class UserController {
   public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.params.id);
+
+      logger.info(userId);
       const findOneUserData: User = await this.user.findUserById(userId);
 
       res.status(200).json({ data: findOneUserData, message: 'findOne' });
