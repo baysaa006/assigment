@@ -24,7 +24,7 @@ export class WalletEntity extends BaseEntity implements Wallet {
   @Column({ type: 'varchar', nullable: true })
   chainId: string;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', nullable: true })
   type: WalletType;
 
   @OneToMany(() => TokenEntity, token => token.wallet)

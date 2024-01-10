@@ -1,40 +1,48 @@
+import React, { createContext, useContext, ReactNode } from "react";
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+} from "axios";
+import { getAccessToken } from "contexts/auth.context";
 import { useToast } from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactNode } from "react";
 
-const ClientProvider = ({ children }: { children: ReactNode }) => {
-  const toast = useToast();
+interface AxiosContextProps {
+  axiosInstance: AxiosInstance;
+}
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        onError: (error) => {
-          toast({
-            title: "Алдаа",
-            description: error.toString(),
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
-        },
-      },
-      mutations: {
-        onError: (error) => {
-          toast({
-            title: "Алдаа",
-            description: error.toString(),
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
-        },
-      },
-    },
-  });
-
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+const AxiosContext = createContext<AxiosContextProps | undefined>(undefined);
+export const axiosConfig = {
+  baseURL: "http://localhost:3000",
+  headers: {
+    "Content-Type": "application/json",
+  },
 };
 
-export default ClientProvider;
+export const api = axios.create(axiosConfig);
+
+export const AxiosProvider: React.FC<{
+  children: ReactNode;
+}> = ({ children }) => {
+  const toast = useToast();
+  api.interceptors.response.use(
+    (response: AxiosResponse) => response,
+    (error: any) => {
+      toast({
+        status: "info",
+        title: "Алдаа гарлаа",
+        description: error.response.data.message,
+        duration: 3000,
+      });
+
+      return Promise.reject(error);
+    }
+  );
+
+  return (
+    <AxiosContext.Provider value={{ axiosInstance: api }}>
+      {children}
+    </AxiosContext.Provider>
+  );
+};

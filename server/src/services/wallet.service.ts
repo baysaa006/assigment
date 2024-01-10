@@ -22,12 +22,14 @@ export class WalletService extends Repository<WalletEntity> {
     return wallet;
   }
 
-  public async saveWallet(walletData: Wallet): Promise<Wallet> {
-    let wallet: Wallet = await WalletEntity.findOne({ where: { address: walletData.address } });
+  public async createWallet(address: string): Promise<Wallet> {
+    let wallet = await WalletEntity.findOne({ where: { address: address } });
 
-    if (wallet) throw new ServiceException(WALLET_EXIST);
+    if (wallet) return;
 
-    wallet = await WalletEntity.create({ ...walletData }).save();
+    wallet = new WalletEntity();
+    wallet.address = address;
+    wallet = await wallet.save();
 
     return wallet;
   }

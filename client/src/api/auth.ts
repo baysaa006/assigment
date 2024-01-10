@@ -1,32 +1,21 @@
 import axios from "axios";
-import { useQuery } from "react-query";
-
-const baseUrl = process.env.REACT_APP_URL || "http://localhost:3000";
+import { getAccessToken } from "contexts/auth.context";
+import { api } from "providers";
 
 export const getNonce = async (address: string) => {
-  try {
-    const response = await axios.get(`${baseUrl}/nonce?address=${address}`);
-    return response.data;
-  } catch (error: any) {
-    console.log(error);
-  }
+  const response = await api.get(`nonce?address=${address}`);
+  return response.data;
 };
 
-export const verifySignature = async (tempToken: string, signature: string) => {
+export const verifySignature = async (signature: string) => {
   try {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${tempToken}`,
-      },
-    };
-    const response = await axios.post(
-      `${baseUrl}/verify`,
+    const response = await api.post(
+      `/verify`,
       { signature },
-      config
+      { headers: { Authorization: `Bearer ${getAccessToken()}` } }
     );
     return response.data;
-  } catch (error: any) {
-    console.log(error);
+  } catch (error) {
+    throw error;
   }
 };

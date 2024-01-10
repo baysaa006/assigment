@@ -17,6 +17,6 @@ export interface Payload {
   exp: number;
 }
 
-export interface RequestWithUser extends Request {
-  user: User;
+export interface RequestWithPayload extends Request {
+  payload: Payload;
 }

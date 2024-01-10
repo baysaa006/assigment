@@ -1,39 +1,58 @@
 import { NextFunction, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
-import { UserEntity } from '@entities/users.entity';
 import { ServiceException } from '@common/exceptions';
-import { DataStoredInToken, RequestWithUser } from '@common/interfaces';
-import { INVALID_TOKEN } from '@common/exceptions/Errors';
+import { Payload, RequestWithPayload } from '@common/interfaces';
+import { INVALID_TOKEN, TOKEN_EXPIRED } from '@common/exceptions/Errors';
+import { WalletEntity } from '@/entities/wallet.entity';
+import { getAuthorization } from '@/utils/functions';
 
-const getAuthorization = req => {
-  const coockie = req.cookies['Authorization'];
-  if (coockie) return coockie;
-
-  const header = req.header('Authorization');
-  if (header) return header.split('Bearer ')[1];
-
-  return null;
-};
-
-export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+export const AuthMiddleware = async (req: RequestWithPayload, res: Response, next: NextFunction) => {
   try {
     const Authorization = getAuthorization(req);
 
-    if (Authorization) {
-      const { id } = (await verify(Authorization, SECRET_KEY)) as DataStoredInToken;
-      const findUser = await UserEntity.findOne(id);
+    if (!Authorization) next(new ServiceException(INVALID_TOKEN));
 
-      if (findUser) {
-        req.user = findUser;
-        next();
-      } else {
-        next(new ServiceException(INVALID_TOKEN));
+    verify(Authorization, SECRET_KEY, async (err, decoded: Payload) => {
+      if (err) throw new ServiceException(INVALID_TOKEN);
+
+      const exist = await WalletEntity.findOne({ where: { address: decoded.address } });
+
+      if (!exist) throw new ServiceException(INVALID_TOKEN);
+
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+
+      if (decoded.exp > currentTimestamp) {
+        throw new ServiceException(TOKEN_EXPIRED);
       }
-    } else {
-      next(new ServiceException(INVALID_TOKEN));
-    }
+
+      req.payload = decoded;
+
+      next();
+    });
   } catch (error) {
-    next(new ServiceException(INVALID_TOKEN));
+    next(error);
+  }
+};
+
+export const VerifyTokenMiddleware = async (req: RequestWithPayload, res: Response, next: NextFunction) => {
+  try {
+    const Authorization = getAuthorization(req);
+
+    if (!Authorization) throw new ServiceException(INVALID_TOKEN);
+
+    const payload = verify(Authorization, SECRET_KEY) as Payload;
+
+    if (!payload) throw new ServiceException(INVALID_TOKEN);
+
+    if (payload.exp * 1000 < new Date().getTime()) {
+      throw new ServiceException(TOKEN_EXPIRED);
+    }
+
+    req.payload = payload;
+
+    next();
+  } catch (error) {
+    next(error);
   }
 };

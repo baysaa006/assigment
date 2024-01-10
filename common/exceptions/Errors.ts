@@ -42,6 +42,12 @@ export const NOT_ENOUGH = new ErrorType(
   "Таны эрх хүрэлцэхгүй байна."
 );
 
-export const INVALID_TOKEN = new ErrorType(400, "CU17", "Токен буруу байна");
+export const INVALID_TOKEN = new ErrorType(400, "CT01", "Токен буруу байна");
+
+export const TOKEN_EXPIRED = new ErrorType(
+  400,
+  "CT01",
+  "Токен хугацаа дууссан байна"
+);
 
 export const VALIDATION_ERROR = new ErrorType(500, "SE17", "Server error");

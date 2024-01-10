@@ -13,9 +13,12 @@ export const createToken = (user: User): TokenData => {
 export const getMessage = (nonce: string, address: string): string => {
   return `Please sing this to access assigment project. 
     \n NONCE: ${nonce}
-    \n Wallet: ${address};`;
+    \n Wallet: ${address}`;
 };
 
-export const createCookie = (tokenData: TokenData): string => {
-  return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
+export const getAuthorization = req => {
+  const header = req.header('Authorization');
+  if (header) return header.split('Bearer ')[1];
+
+  return null;
 };

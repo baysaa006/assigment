@@ -8,7 +8,6 @@ export const setAccessToken = (token: string) =>
 export const getAccessToken = () => {
   const token = localStorage.getItem("token");
   if (token) return token;
-  return "y5A7CaFcHfMhPkSpUrWuZw3z6B8DbGdJfNjQmSqVsXv2x4z7C9";
 };
 
 export const isValidToken = (lockedToken?: any) => {

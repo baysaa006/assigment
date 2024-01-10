@@ -17,7 +17,7 @@ export class UserController {
     }
   };
 
-  public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.params.id);
 

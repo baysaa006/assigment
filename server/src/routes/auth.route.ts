@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { AuthController } from '@controllers/auth.controller';
 import { CreateUserDto } from '@dtos/users.dto';
 import { Routes } from '@common/interfaces';
-import { AuthMiddleware } from '@middlewares/auth.middleware';
+import { VerifyTokenMiddleware } from '@middlewares/auth.middleware';
 import { ValidationMiddleware } from '@middlewares/validation.middleware';
 
 export class AuthRoute implements Routes {
@@ -15,7 +15,7 @@ export class AuthRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get('/nonce', this.auth.getNonce);
-    this.router.post('/verify', this.auth.verifySignature);
+    this.router.post('/verify', VerifyTokenMiddleware, this.auth.verifySignature);
     this.router.post('/signup', ValidationMiddleware(CreateUserDto), this.auth.signUp);
   }
 }

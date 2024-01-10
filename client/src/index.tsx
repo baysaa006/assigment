@@ -4,12 +4,12 @@ import "./index.css";
 import App from "./App";
 import AuthProvider from "contexts/auth.context";
 import { ChakraProvider } from "@chakra-ui/react";
-import ClientProvider from "providers/client";
+import { AxiosProvider, axiosConfig } from "providers";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <ChakraProvider>
-    <ClientProvider>
+    <AxiosProvider>
       <BrowserRouter>
         <AuthProvider>
           <Routes>
@@ -17,6 +17,6 @@ root.render(
           </Routes>
         </AuthProvider>
       </BrowserRouter>
-    </ClientProvider>
+    </AxiosProvider>
   </ChakraProvider>
 );

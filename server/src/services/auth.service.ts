@@ -8,7 +8,7 @@ import { Payload, TokenData, User } from '@common/interfaces';
 import { USER_ALREADY_EXIST } from '@common/exceptions';
 import { v4 as uuidv4 } from 'uuid';
 import Web3 from 'web3';
-import { createCookie, createToken, getMessage } from '@/utils/functions';
+import { createToken, getMessage } from '@/utils/functions';
 
 @Service()
 @EntityRepository()
@@ -29,9 +29,7 @@ export class AuthService extends Repository<UserEntity> {
     return { tempToken, message };
   }
 
-  public async verifySignature(tempToken: string, signature: string) {
-    const payload: Payload = await this.decodeToken(tempToken);
-
+  public async verifySignature(payload: Payload, signature: string) {
     const { address, nonce } = payload;
 
     const message = getMessage(nonce, address);
@@ -41,14 +39,14 @@ export class AuthService extends Repository<UserEntity> {
     if (!verifiedAddress) throw new ServiceException(INVALID_ADDRESS);
 
     if (verifiedAddress.toLowerCase() === address.toLowerCase()) {
-      const token = sign({ wallet: verifiedAddress, signature }, SECRET_KEY, { expiresIn: '1d' });
+      const token = sign({ address: verifiedAddress, signature }, SECRET_KEY, { expiresIn: '1d' });
       return token;
     } else {
       throw new ServiceException(INVALID_ADDRESS);
     }
   }
 
-  private async decodeToken(token: string): Promise<Payload> {
+  public async decodeToken(token: string): Promise<Payload> {
     return new Promise((resolve, reject) => {
       verify(token, SECRET_KEY, (err, decoded) => {
         if (!err) {
