@@ -63,8 +63,10 @@ git clone https://github.com/baysaa006/assigment.git
 ```bash
 cd assigment
 
+# Install server dependencies
 yarn i-server
 
+# Install client dependencies
 yarn i-client
 
 ```
@@ -72,7 +74,16 @@ yarn i-client
 ## **Start the application :**
 
 ```bash
+
+cd assigment
+
+# Start server
 yarn s-server
 
+# Start client
 yarn s-client
 ```
+
+- Client application will run on https://localhost:3001
+
+- Server application will run on https://localhost:3000
