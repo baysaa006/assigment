@@ -6,12 +6,11 @@ A full-stack web application using Express.js, PostgreSQL, and React for user au
 
 - [Project completion](#completion)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Configuration](#configuration)
+  - [Prerequisites](#installation)
+  - [Configuration](#configuration)
 - [Usage](#usage)
 
-## Completion
+# Completion
 
 ✅ Ethereum Wallet Login
 
@@ -25,17 +24,55 @@ A full-stack web application using Express.js, PostgreSQL, and React for user au
 
 ✅ Security and Validation
 
-## Technologies Used
+# Getting Started
 
-- [Express.js](https://expressjs.com/) with TypeScript
-- [React](https://reactjs.org/) with TypeScript
-- PostgreSQL for Database Storage
+## Prerequisites
 
-## Getting Started
+### 1. Install NodeJS
 
-### Prerequisites
+Download and install NodeJS from [this link](https://nodejs.org/en/download/current).
 
-- Node.js and npm installed
-- PostgreSQL database setup
+### 2. Install PostgreSQL
 
-### Installation
+Download and install PostgreSQL from [this link](https://www.postgresql.org/download/).
+
+## Configuration
+
+### 1. Database Setup
+
+After installing PostgreSQL, open pgAdmin or any other PostgreSQL management tool and create a new database named **dev**.
+
+### 2. User Setup
+
+Create a new user named **postgres** and set the password as **password**.
+
+### 3. Grant Permissions
+
+Grant all permissions to the **_postgres_** user on the **dev** database.
+
+# Usage
+
+## **Clone the Repository:**
+
+```bash
+git clone https://github.com/baysaa006/assigment.git
+```
+
+## **Install dependencies :**
+
+```bash
+cd assigment
+
+yarn i-server
+
+yarn i-client
+
+```
+
+## **Start the application :**
+
+```bash
+yarn s-server
+
+yarn s-client
+```
