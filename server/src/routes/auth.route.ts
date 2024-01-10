@@ -14,8 +14,8 @@ export class AuthRoute implements Routes {
   }
 
   private initializeRoutes() {
+    this.router.get('/check', this.auth.checkSignature);
     this.router.get('/nonce', this.auth.getNonce);
     this.router.post('/verify', VerifyTokenMiddleware, this.auth.verifySignature);
-    this.router.post('/signup', ValidationMiddleware(CreateUserDto), this.auth.signUp);
   }
 }

@@ -30,19 +30,28 @@ export class AuthController {
 
       const token = await this.auth.verifySignature(payload, signature.toString());
 
-      await this.wallet.createWallet(payload.address);
-      res.status(200).json({ data: token, message: 'success' });
+      let wallet = await this.wallet.getWallet(payload.address);
+
+      let isSigned = false;
+
+      if (!wallet) {
+        wallet = await this.wallet.createWallet(payload);
+      } else {
+        isSigned = wallet.isSigned;
+      }
+
+      res.status(200).json({ data: { token, isSigned }, message: 'success' });
     } catch (error) {
       next(error);
     }
   };
 
-  public signUp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public checkSignature = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: User = req.body;
-      const signUpUserData: User = await this.auth.signup(userData);
+      const { address } = req.query;
 
-      res.status(200).json({ data: signUpUserData, message: 'signup' });
+      const nonce = await this.auth.check(address.toString());
+      res.status(201).json({ data: nonce });
     } catch (error) {
       next(error);
     }

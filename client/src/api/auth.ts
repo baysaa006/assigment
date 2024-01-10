@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getAccessToken } from "contexts/auth.context";
 import { api } from "providers";
 
 export const getNonce = async (address: string) => {
@@ -7,15 +6,20 @@ export const getNonce = async (address: string) => {
   return response.data;
 };
 
-export const verifySignature = async (signature: string) => {
+export const verifySignature = async (signature: string, tempToken: string) => {
   try {
     const response = await api.post(
       `/verify`,
       { signature },
-      { headers: { Authorization: `Bearer ${getAccessToken()}` } }
+      { headers: { Authorization: `Bearer ${tempToken}` } }
     );
     return response.data;
   } catch (error) {
     throw error;
   }
+};
+
+export const checkSignature = async (address: string) => {
+  const response = await api.get(`check?address=${address}`);
+  return response.data;
 };

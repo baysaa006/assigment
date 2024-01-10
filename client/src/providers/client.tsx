@@ -1,11 +1,5 @@
 import React, { createContext, useContext, ReactNode } from "react";
-import axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  AxiosError,
-} from "axios";
-import { getAccessToken } from "contexts/auth.context";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { useToast } from "@chakra-ui/react";
 
 interface AxiosContextProps {

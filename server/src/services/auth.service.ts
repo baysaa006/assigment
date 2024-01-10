@@ -1,14 +1,16 @@
 import { sign, verify } from 'jsonwebtoken';
-import { Service } from 'typedi';
+import Container, { Service } from 'typedi';
 import { EntityRepository, Repository } from 'typeorm';
 import { SECRET_KEY } from '@config';
 import { UserEntity } from '@entities/users.entity';
 import { INVALID_ADDRESS, INVALID_TOKEN, NO_ADDRESS, ServiceException } from '@common/exceptions';
-import { Payload, TokenData, User } from '@common/interfaces';
+import { Payload, TokenData, User, Wallet } from '@common/interfaces';
 import { USER_ALREADY_EXIST } from '@common/exceptions';
 import { v4 as uuidv4 } from 'uuid';
 import Web3 from 'web3';
 import { createToken, getMessage } from '@/utils/functions';
+import { WalletService } from './wallet.service';
+import { WalletEntity } from '@/entities/wallet.entity';
 
 @Service()
 @EntityRepository()
@@ -58,11 +60,11 @@ export class AuthService extends Repository<UserEntity> {
     });
   }
 
-  public async signup(userData: User): Promise<User> {
-    const findUser: User = await UserEntity.findOne({ where: { email: userData.email } });
-    if (findUser) throw new ServiceException(USER_ALREADY_EXIST);
+  public async check(address: string): Promise<{ status: boolean }> {
+    if (!address) throw new ServiceException(NO_ADDRESS);
 
-    const createUserData: User = await UserEntity.create({ ...userData }).save();
-    return createUserData;
+    const wallet = await WalletEntity.findOne({ where: { address } });
+
+    return { status: wallet ? wallet.isSigned : false };
   }
 }

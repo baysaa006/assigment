@@ -1,17 +1,17 @@
 import React, { ReactNode } from "react";
-import { Flex } from "@chakra-ui/react";
+import Navbar from "./navbar";
 
-export function PageContainer({ children }: { children: ReactNode }) {
+export function Layout({ children }: { children: ReactNode }) {
   return (
-    <Flex
-      className="dark bg-navy-900 text-white"
-      minHeight="100vh"
-      width="100%"
-      alignItems="center"
-      justifyContent="top"
-      flexDirection="column"
-    >
-      {children}
-    </Flex>
+    <div className="flex w-full items-center justify-center bg-navy-900">
+      <div className="flex h-screen w-full flex-col">
+        <nav className="flex w-full items-center justify-center border-b-2 border-b-white">
+          <Navbar />
+        </nav>
+        <div className="flex w-full justify-center px-8 py-4">
+          <div className="w-full max-w-[2000px]">{children}</div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,7 +1,6 @@
 import { BaseEntity, Entity, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { Wallet, Token } from '@common/interfaces';
 import { UserEntity } from './users.entity';
-import { TokenEntity } from './token.entity';
 
 export enum WalletType {
   METAMASK = 'METAMASK',
@@ -27,8 +26,11 @@ export class WalletEntity extends BaseEntity implements Wallet {
   @Column({ type: 'varchar', nullable: true })
   type: WalletType;
 
-  @OneToMany(() => TokenEntity, token => token.wallet)
-  tokens: Token[];
+  @Column({ type: 'boolean', nullable: true })
+  isSigned: boolean;
+
+  @Column({ type: 'varchar', nullable: true })
+  signature: string;
 
   @Column()
   @CreateDateColumn()

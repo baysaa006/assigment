@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Service } from 'typedi';
 import { UserEntity } from '@entities/users.entity';
 import { NO_WALLET, ServiceException, WALLET_EXIST } from '@common/exceptions';
-import { User, Wallet } from '@common/interfaces';
+import { Payload, User, Wallet } from '@common/interfaces';
 import { NO_USER, USER_ALREADY_EXIST } from '@common/exceptions';
 import { WalletEntity } from '@/entities/wallet.entity';
 
@@ -14,21 +14,20 @@ export class WalletService extends Repository<WalletEntity> {
     return wallets;
   }
 
-  public async getWallet(address: number): Promise<Wallet> {
+  public async getWallet(address: string): Promise<Wallet> {
     const wallet: Wallet = await WalletEntity.findOne({ where: { address } });
-
-    if (!wallet) throw new ServiceException(NO_WALLET);
 
     return wallet;
   }
 
-  public async createWallet(address: string): Promise<Wallet> {
-    let wallet = await WalletEntity.findOne({ where: { address: address } });
+  public async createWallet(payload: Payload): Promise<Wallet> {
+    let wallet = await WalletEntity.findOne({ where: { address: payload.address } });
 
     if (wallet) return;
 
     wallet = new WalletEntity();
-    wallet.address = address;
+    wallet.address = payload.address;
+    wallet.signature = payload.signature;
     wallet = await wallet.save();
 
     return wallet;
