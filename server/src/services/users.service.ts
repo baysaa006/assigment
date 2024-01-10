@@ -2,35 +2,27 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Service } from 'typedi';
 import { UserEntity } from '@entities/users.entity';
 import { ServiceException } from '@common/exceptions';
-import { User } from '@common/interfaces';
-import { NO_USER, USER_ALREADY_EXIST } from '@common/exceptions';
+import { User, UserInput } from '@common/interfaces';
+import { NO_USER } from '@common/exceptions';
 
 @Service()
 @EntityRepository()
 export class UserService extends Repository<UserEntity> {
-  public async findAllUser(): Promise<User[]> {
-    const users: User[] = await UserEntity.find();
-    return users;
+  public async findUserByName(name: string) {
+    const findUser = await UserEntity.findOne({ where: { name: name } });
+
+    if (!findUser) return false;
+    else return true;
   }
 
-  public async findUserById(userId: number): Promise<User> {
-    const findUser: User = await UserEntity.findOne({ where: { id: userId } });
+  public async findUserByAdrress(address: string) {
+    const findUser = await UserEntity.findOne({ where: { address } });
 
-    if (!findUser) throw new ServiceException(NO_USER);
-
-    return findUser;
+    if (!findUser) return false;
+    else return findUser;
   }
 
-  public async createUser(userData: User): Promise<User> {
-    const findUser: User = await UserEntity.findOne({ where: { email: userData.email } });
-    if (findUser) throw new ServiceException(USER_ALREADY_EXIST);
-
-    const createUserData: User = await UserEntity.create({ ...userData }).save();
-
-    return createUserData;
-  }
-
-  public async updateUser(userId: number, userData: User): Promise<User> {
+  public async updateUser(userId: number, userData: UserInput): Promise<User> {
     const findUser: User = await UserEntity.findOne({ where: { id: userId } });
     if (!findUser) throw new ServiceException(NO_USER);
 
@@ -38,13 +30,5 @@ export class UserService extends Repository<UserEntity> {
 
     const updateUser: User = await UserEntity.findOne({ where: { id: userId } });
     return updateUser;
-  }
-
-  public async deleteUser(userId: number): Promise<User> {
-    const findUser: User = await UserEntity.findOne({ where: { id: userId } });
-    if (!findUser) throw new ServiceException(NO_USER);
-
-    await UserEntity.delete({ id: userId });
-    return findUser;
   }
 }

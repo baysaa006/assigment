@@ -2,16 +2,21 @@ import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { User } from '@common/interfaces';
 import { UserService } from '@services/users.service';
-import { logger } from '@/utils/logger';
+import { NO_USER, ServiceException } from '@common/exceptions';
+import { getAuthorization } from '@/utils/functions';
+import { AuthService } from '@/services/auth.service';
 
 export class UserController {
   public user = Container.get(UserService);
+  public auth = Container.get(AuthService);
 
-  public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public checkUserName = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const findAllUsersData: User[] = await this.user.findAllUser();
+      const { name } = req.query;
 
-      res.status(200).json({ data: findAllUsersData, message: 'findAll' });
+      const exist = await this.user.findUserByName(name.toString());
+
+      res.status(200).json({ data: exist });
     } catch (error) {
       next(error);
     }
@@ -19,23 +24,15 @@ export class UserController {
 
   public getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userId = Number(req.params.id);
+      const tempToken = getAuthorization(req);
 
-      logger.info(userId);
-      const findOneUserData: User = await this.user.findUserById(userId);
+      const payload = await this.auth.decodeToken(tempToken);
 
-      res.status(200).json({ data: findOneUserData, message: 'findOne' });
-    } catch (error) {
-      next(error);
-    }
-  };
+      const user = await this.user.findUserByAdrress(payload.address);
 
-  public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const userData: User = req.body;
-      const createUserData: User = await this.user.createUser(userData);
+      if (!user) next(new ServiceException(NO_USER));
 
-      res.status(201).json({ data: createUserData, message: 'created' });
+      res.status(200).json({ data: user, message: 'findOne' });
     } catch (error) {
       next(error);
     }
@@ -43,22 +40,21 @@ export class UserController {
 
   public updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userId = Number(req.params.id);
-      const userData: User = req.body;
-      const updateUserData: User = await this.user.updateUser(userId, userData);
+      const tempToken = getAuthorization(req);
+
+      const payload = await this.auth.decodeToken(tempToken);
+
+      const user = await this.user.findUserByAdrress(payload.address);
+
+      if (!user) throw new ServiceException(NO_USER);
+
+      const userData = req.body;
+
+      console.log(userData.body);
+
+      const updateUserData = await this.user.updateUser(user.id, userData.body);
 
       res.status(200).json({ data: updateUserData, message: 'updated' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public deleteUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const userId = Number(req.params.id);
-      const deleteUserData: User = await this.user.deleteUser(userId);
-
-      res.status(200).json({ data: deleteUserData, message: 'deleted' });
     } catch (error) {
       next(error);
     }

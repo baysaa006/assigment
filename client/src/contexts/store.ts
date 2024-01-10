@@ -28,8 +28,8 @@ export const authStore = create<TAuthStore>(
         exp: 0,
       },
       getPayload: () => {
-        if (get().payload) return decode(get().payload);
-        else return;
+        if (!get()?.payload || get()?.payload?.address === "") return;
+        return decode(get().payload);
       },
       connectWallet: async (callback: any) => {
         const requestAccounts = async (provider: any) => {

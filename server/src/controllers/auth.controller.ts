@@ -4,10 +4,13 @@ import { User } from '@common/interfaces';
 import { AuthService } from '@services/auth.service';
 import { getAuthorization } from '@/utils/functions';
 import { WalletService } from '@/services/wallet.service';
+import { UserEntity } from '@/entities/users.entity';
+import { UserService } from '@/services/users.service';
 
 export class AuthController {
   public auth = Container.get(AuthService);
   public wallet = Container.get(WalletService);
+  public user = Container.get(UserService);
 
   public getNonce = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -36,6 +39,13 @@ export class AuthController {
 
       if (!wallet) {
         wallet = await this.wallet.createWallet(payload);
+
+        let user = await this.user.findUserByAdrress(wallet.address);
+        if (!user) {
+          user = new UserEntity();
+          user.address = wallet.address;
+          user = await user.save();
+        }
       } else {
         isSigned = wallet.isSigned;
       }

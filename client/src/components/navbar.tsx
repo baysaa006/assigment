@@ -40,15 +40,8 @@ const Navbar = () => {
     { name: "Log Out", action: () => onExit() },
   ];
 
-  const changePath = (path: string) => {
-    navigate(`${path}`);
-    if (!logged && ["admin", "settings"].includes(path)) {
-      connectWallet(() => navigate(`${path}`));
-    }
-  };
-
   return (
-    <nav className="  flex w-full max-w-[2000px] flex-row flex-wrap items-center justify-between gap-2   px-8 py-3  backdrop-blur-xl">
+    <nav className="flex w-full max-w-[2000px] flex-row flex-wrap items-center justify-between gap-2   px-8 py-3  backdrop-blur-xl">
       <div className="ml-[6px]   flex gap-8 ">
         <Text
           color="white"
@@ -56,7 +49,9 @@ const Navbar = () => {
           textTransform="uppercase"
           fontWeight="bold"
         >
-          {location.pathname.replace("/", "") || "home"}
+          {location.pathname === "/"
+            ? "home"
+            : location.pathname.replace("/", "")}
         </Text>
       </div>
       <div className="flex h-full items-center gap-6">
@@ -96,9 +91,10 @@ const Navbar = () => {
                   <MenuItem
                     key={index}
                     onClick={() => e.action()}
+                    fontSize="large"
                     className={`${
                       [0, 1].includes(index) ? " border-b-0 " : ""
-                    } border-2 border-gray-600 !bg-navy-900  text-xl font-bold capitalize  !text-white backdrop-blur-xl ${
+                    } border-2 border-gray-600 !bg-navy-900 capitalize  !text-white backdrop-blur-xl ${
                       index === array.length - 1 && "rounded-b-md"
                     } ${index === 0 && "rounded-t-md"}`}
                   >
@@ -110,7 +106,7 @@ const Navbar = () => {
           </>
         ) : (
           <button
-            onClick={() => connectWallet(() => navigate(`/admin`))}
+            onClick={() => connectWallet(() => navigate(`/settings`))}
             className="font-bold capitalize text-white "
           >
             Connect Wallet

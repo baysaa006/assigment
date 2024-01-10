@@ -20,12 +20,9 @@ export const AuthMiddleware = async (req: RequestWithPayload, res: Response, nex
 
       if (!exist) throw new ServiceException(INVALID_TOKEN);
 
-      const currentTimestamp = Math.floor(Date.now() / 1000);
-
-      if (decoded.exp > currentTimestamp) {
+      if (decoded.exp * 1000 < new Date().getTime()) {
         throw new ServiceException(TOKEN_EXPIRED);
       }
-
       req.payload = decoded;
 
       next();

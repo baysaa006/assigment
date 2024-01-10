@@ -4,6 +4,7 @@ import { ReactNode, useContext } from "react";
 import Admin from "pages/admin/index";
 import Settings from "pages/settings/index";
 import authStore from "contexts/store";
+import SettingsLayOut from "components/layouts/settings";
 
 const App = () => {
   return (
@@ -13,7 +14,15 @@ const App = () => {
       <Route path="/admin" element={<RequireAuth element={<Admin />} />} />
       <Route
         path="/settings"
-        element={<RequireAuth element={<Settings />} />}
+        element={
+          <RequireAuth
+            element={
+              <SettingsLayOut>
+                <Settings />
+              </SettingsLayOut>
+            }
+          />
+        }
       />
     </Routes>
   );

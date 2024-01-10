@@ -1,8 +1,15 @@
-import { Wallet } from './wallet.interface';
-
 export interface User {
   id?: number;
+  name: string;
   email?: string;
   phone?: string;
-  wallets: Wallet[];
+  bio: string;
+  address: string;
+}
+
+export interface UserInput {
+  name: string;
+  email: string;
+  phone: string;
+  bio: string;
 }

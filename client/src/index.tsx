@@ -4,8 +4,7 @@ import "./index.css";
 import App from "./App";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AxiosProvider, axiosConfig } from "providers";
-import Navbar from "components/navbar";
-import { Layout } from "components/layouts";
+import { MainLayout } from "components/layouts/layouts";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -16,9 +15,9 @@ root.render(
           <Route
             path="/*"
             element={
-              <Layout>
+              <MainLayout>
                 <App />
-              </Layout>
+              </MainLayout>
             }
           />
         </Routes>

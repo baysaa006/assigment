@@ -8,7 +8,7 @@ export class WalletController {
 
   public getWallet = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const wallet = Number(req.params.id);
+      const wallet = req.params.id;
 
       const found: Wallet = await this.wallet.getWallet(wallet);
 

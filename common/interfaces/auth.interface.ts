@@ -1,5 +1,4 @@
 import { Request } from "express";
-import { User } from ".";
 
 export interface DataStoredInToken {
   id: number;
@@ -11,6 +10,7 @@ export interface TokenData {
 }
 
 export interface Payload {
+  iss: string;
   address: string;
   signature: string;
   nonce: string;

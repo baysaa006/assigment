@@ -1,5 +1,16 @@
-import { BaseEntity, Entity, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, Index, PrimaryGeneratedColumn } from 'typeorm';
-import { Wallet, Token } from '@common/interfaces';
+import {
+  BaseEntity,
+  Entity,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  OneToMany,
+  Index,
+  PrimaryGeneratedColumn,
+  OneToOne,
+} from 'typeorm';
+import { Wallet } from '@common/interfaces';
 import { UserEntity } from './users.entity';
 
 export enum WalletType {
@@ -14,7 +25,7 @@ export class WalletEntity extends BaseEntity implements Wallet {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserEntity, { nullable: true })
+  @OneToOne(() => UserEntity, user => user.wallet)
   user: UserEntity;
 
   @Column({ type: 'varchar', nullable: false })
