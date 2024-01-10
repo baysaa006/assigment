@@ -84,6 +84,6 @@ yarn s-server
 yarn s-client
 ```
 
-- Client application will run on https://localhost:3001
+- Client application will run on http://localhost:3001
 
-- Server application will run on https://localhost:3000
+- Server application will run on http://localhost:3000
