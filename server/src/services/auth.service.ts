@@ -19,7 +19,7 @@ export class AuthService extends Repository<UserEntity> {
 
   constructor() {
     super();
-    this.web3 = new Web3('https://cloudflare-eth.com/');
+    this.web3 = new Web3();
   }
 
   public async createNonce(address: string): Promise<{ tempToken: string; message: string }> {
